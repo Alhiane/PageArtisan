@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head, router} from '@inertiajs/vue3';
-import {defineProps, reactive, ref, watch} from 'vue';
+import {reactive, ref, watch} from 'vue';
 import Modal from "@/Components/Modal.vue";
 
 // defined props
@@ -30,15 +30,14 @@ const openConfirmModal = () => {
 // form
 const form = reactive({
     name: '',
-    slug: '',
+    tag: '',
 });
 
 // watch form changes on name
 watch(() => form.name, (value) => {
     // check if value is not empty and replace spaces with hyphen and lowercase then assign to slug
     if (value) {
-        form.slug = value.replace(/\s+/g, '-').toLowerCase();
-        form.clearErrors()
+        form.tag = value.replace(/\s+/g, '-').toLowerCase();
     }
 });
 
@@ -46,7 +45,10 @@ watch(() => form.name, (value) => {
 function submit() {
     router.post(route('workspaces.store'), form, {
         preserveScroll: true,
-        onSuccess: () => closeModal(),
+        onSuccess: (result) =>{
+            closeModal()
+            router.push(route('workspaces.show', result.tag))
+        }
     });
 }
 
@@ -98,7 +100,7 @@ function submit() {
                                 <label for="workspace_slug"
                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                     Slug</label>
-                                <input v-model="form.slug" type="text" name="workspace_slug" id="workspace_slug"
+                                <input v-model="form.tag" type="text" name="workspace_slug" id="workspace_slug"
                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                                        placeholder="my-workspace" required>
 

@@ -10,8 +10,8 @@ class WorkspaceService
     // index
     public function index()
     {
-        // fetch all workspaces
-        $workspaces = Workspace::all();
+        // fetch all workspaces by latest
+        $workspaces = Workspace::latest()->get();
         // return
         return $workspaces;
     }
@@ -19,7 +19,7 @@ class WorkspaceService
     // generate store update destroy
     public function store($request)
     {
-        // validate request data name and sslug
+        // validate request data name and slug
         $request->validate([
             'name' => 'required|string|max:255|unique:workspaces',
             'tag' => 'required|string|max:255|unique:workspaces',
@@ -28,15 +28,25 @@ class WorkspaceService
         // create workspace
         $workspace = Workspace::create([
             'name' => $request->name,
-            'tag' => $request->slug,
-            'domain' => 'https://'.$request->slug.'.pageartisan.com',
+            'tag' => $request->tag,
+            'domain' => 'https://'.$request->tag.'.pageartisan.com',
         ]);
 
         // return response to controller
         return response()->json([
             'message' => 'Workspace created successfully',
-            'workspace' => $workspace
+            'workspace' => $workspace,
+            'tag' => $workspace->tag,
         ], 201);
+    }
+
+    // show
+    public function show($request, $tag)
+    {
+        // fetch workspace by tag
+        $workspace = Workspace::where('tag', $tag)->firstOrFail();
+        // return
+        return $workspace;
     }
 
     public function update($request)

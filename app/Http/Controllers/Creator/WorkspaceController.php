@@ -5,14 +5,16 @@ namespace App\Http\Controllers\Creator;
 use App\Http\Controllers\Controller;
 use App\Services\WorkspaceService;
 use Illuminate\Http\Request;
+use App\Services\Pages\PagesService;
 
 class WorkspaceController extends Controller
 {
-    protected  $workspaceService;
+    protected $workspaceService;
+
     // constructor
     public function __construct(WorkspaceService $workspaceService)
     {
-        $this->middleware(['auth','role:creator']);
+        $this->middleware(['auth', 'role:creator']);
         $this->workspaceService = new WorkspaceService;
     }
 
@@ -34,9 +36,25 @@ class WorkspaceController extends Controller
     }
 
     // show edit
-    public function show(Request $request)
+    public function show(Request $request, $tag)
     {
+        // show workspace by tag
+        $workspace = $this->workspaceService->show($request, $tag);
+
         //
+        $path_clone = 'https://inertiajs.com/';
+        $pagesService = new PagesService();
+        $page = $pagesService
+            ->clone($path_clone, 'clones/')
+            ->screenShote('storage/screenshots/')
+            ->load();
+
+        // return
+        return inertia('Creator/Workspace/Show', [
+            'workspace' => $workspace,
+            'page' => $page
+        ]);
+
     }
 
     // generate store update destroy

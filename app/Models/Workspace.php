@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Workspace extends Model
 {
     use HasFactory;
+
+    // fillable
+    protected $fillable = [
+        'name',
+        'tag',
+        'domain',
+    ];
 }

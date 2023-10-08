@@ -27,10 +27,23 @@ class WorkspaceController extends Controller
         ]);
     }
 
+    // create
+    public function create()
+    {
+        //
+    }
+
+    // show edit
+    public function show(Request $request)
+    {
+        //
+    }
+
     // generate store update destroy
     public function store(Request $request)
     {
-        //
+        // call store method from service
+        $this->workspaceService->store($request);
     }
 
     public function update(Request $request)

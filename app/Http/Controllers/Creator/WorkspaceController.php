@@ -41,18 +41,9 @@ class WorkspaceController extends Controller
         // show workspace by tag
         $workspace = $this->workspaceService->show($request, $tag);
 
-        //
-        $path_clone = 'https://inertiajs.com/';
-        $pagesService = new PagesService();
-        $page = $pagesService
-            ->clone($path_clone, 'clones/')
-            ->screenShote('storage/screenshots/')
-            ->load();
-
         // return
         return inertia('Creator/Workspace/Show', [
-            'workspace' => $workspace,
-            'page' => $page
+            'workspace' => $workspace
         ]);
 
     }

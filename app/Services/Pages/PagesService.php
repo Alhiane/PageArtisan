@@ -2,6 +2,8 @@
 
 namespace App\Services\Pages;
 
+use App\Http\Requests\Pages\PageFormRequest;
+use App\Models\Page;
 use Goutte\Client;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Browsershot\Browsershot;
@@ -86,13 +88,23 @@ class PagesService
     // index
     public function index()
     {
-        //
+        // get all pages
+        $pages = Page::all();
+
+        // return
+        return $pages;
+
     }
 
     // generate store update destroy
-    public function store($request)
+    public function store(PageFormRequest $request)
     {
+
         //
+//        $page = $this
+//            ->clone($path_clone, 'clones/')
+//            ->screenShote('storage/screenshots/')
+//            ->load();
     }
 
     public function show($request, $tag)

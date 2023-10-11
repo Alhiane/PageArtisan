@@ -17,7 +17,7 @@ use Inertia\Inertia;
 |
 */
 
-Route::middleware(['auth','role:creator'])->group(function () {
+Route::middleware(['auth', 'role:creator'])->group(function () {
 
 
     // dashboard
@@ -26,18 +26,25 @@ Route::middleware(['auth','role:creator'])->group(function () {
     })->name('dashboard');
 
     // profile
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::controller(ProfileController::class)
+        ->group(function () {
+            Route::get('/profile', 'edit')->name('profile.edit');
+            Route::patch('/profile', 'update')->name('profile.update');
+            Route::delete('/profile', 'destroy')->name('profile.destroy');
+        });
 
-    // workspaced
-    Route::get('/workspaces', [WorkspaceController::class, 'index'])->name('workspaces.index');
-    Route::post('/workspaces', [WorkspaceController::class, 'store'])->name('workspaces.store');
-    Route::get('/workspaces/create', [WorkspaceController::class, 'create'])->name('workspaces.create');
-    Route::get('/workspaces/{workspace}', [WorkspaceController::class, 'show'])->name('workspaces.show');
-    Route::patch('/workspaces/{workspace}', [WorkspaceController::class, 'update'])->name('workspaces.update');
-    Route::delete('/workspaces/{workspace}', [WorkspaceController::class, 'destroy'])->name('workspaces.destroy');
-    Route::get('/workspaces/{workspace}/edit', [WorkspaceController::class, 'edit'])->name('workspaces.edit');
+    // workspaces
+    Route::controller(WorkspaceController::class)
+        ->group(function () {
+
+            Route::get('/workspaces', 'index')->name('workspaces.index');
+            Route::post('/workspaces', 'store')->name('workspaces.store');
+            Route::get('/workspaces/create', 'create')->name('workspaces.create');
+            Route::get('/workspaces/{workspace}', 'show')->name('workspaces.show');
+            Route::patch('/workspaces/{workspace}', 'update')->name('workspaces.update');
+            Route::delete('/workspaces/{workspace}', 'destroy')->name('workspaces.destroy');
+            Route::get('/workspaces/{workspace}/edit', 'edit')->name('workspaces.edit');
+        });
 
 });
 
